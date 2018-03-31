@@ -50,28 +50,15 @@
                     <td> <input id="templateNode" class="folderPathInput"></td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
-                            <tbody>
-                            <tr>
-                                <td colspan="2" class="lableTDheader">Logs</td>
-                            </tr>
-                            <tr>
-                                <td class="lableTD">Root Folder Path : </td>
-                                <td>
-                                    <input id="LogsValueNode" class="folderPathInput">
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <td class="lableTD">MyDocs Root Folder Path : </td>
+                    <td>
+                        <input id="MyDocsNode" class="folderPathInput">
                     </td>
-                    <td colspan="2">
+                    <td colspan="2" rowspan="2">
                         <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
                             <tbody>
                             <tr>
-                                <td colspan="4" class="lableTDheader">Transaction Log</td>
-                            </tr>
-                            <tr>
+                                <td class="lableTDheader">Transaction Log</td>
                                 <td class="lableTD">Enable : </td>
                                 <td>
                                     <select id="TransactionEnableAttr" onchange="TransactionLogEnableToggle()">
@@ -79,15 +66,23 @@
                                         <option value="False">No</option>
                                     </select>
                                 </td>
+                            </tr>
+                            <tr>
                                 <td class="lableTD">
                                     Log Path :
                                 </td>
-                                <td colspan="5">
+                                <td colspan="2">
                                     <input id="TransactionNode" class="folderPathInput">
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lableTD">Logs Root Folder Path : </td>
+                    <td>
+                        <input id="LogsValueNode" class="folderPathInput">
                     </td>
                 </tr>
                 <tr>
@@ -200,14 +195,15 @@
         $("#outputNode").val(xmlDoc.getElementsByTagName("Output")[0].childNodes[0].nodeValue);
         $("#tempNode").val(xmlDoc.getElementsByTagName("Temp")[0].childNodes[0].nodeValue);
         $("#templateNode").val(xmlDoc.getElementsByTagName("Template")[0].childNodes[0].nodeValue);
+        $("#MyDocsNode").val(xmlDoc.getElementsByTagName("MyDocs")[0].childNodes[0].nodeValue);
         $("#AuditNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].childNodes[0].nodeValue);
         $("#ErrorNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].childNodes[0].nodeValue);
         $("#AuditEnableAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("enable"));
-        $("#AuditACLAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("AutoClear"));
-        $("#ErrorACLAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].getAttribute("AutoClear"));
-        $("#AuditACLDaysAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("AutoClearDays"));
-        $("#ErrorACLDaysAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].getAttribute("AutoClearDays"));
-        $("#LogsValueNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Value")[0].childNodes[0].nodeValue);
+        $("#AuditACLAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("autoClear"));
+        $("#ErrorACLAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].getAttribute("autoClear"));
+        $("#AuditACLDaysAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("autoClearDays"));
+        $("#ErrorACLDaysAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].getAttribute("autoClearDays"));
+        $("#LogsValueNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue);
         $("#TransactionNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue);
         $("#TransactionEnableAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].getAttribute("enable"));
 
@@ -225,14 +221,15 @@
         xmlDoc.getElementsByTagName("Output")[0].childNodes[0].nodeValue = $("#outputNode").val();
         xmlDoc.getElementsByTagName("Temp")[0].childNodes[0].nodeValue = $("#tempNode").val();
         xmlDoc.getElementsByTagName("Template")[0].childNodes[0].nodeValue = $("#templateNode").val();
-        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Value")[0].childNodes[0].nodeValue = $("#LogsValueNode").val();
+        xmlDoc.getElementsByTagName("MyDocs")[0].childNodes[0].nodeValue = $("#MyDocsNode").val();
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue = $("#LogsValueNode").val();
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].childNodes[0].nodeValue = $("#AuditNode").val();
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("enable",$("#AuditEnableAttr").val());
-        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("AutoClear",$("#AuditACLAttr").val());
-        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("AutoClearDays",$("#AuditACLDaysAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("autoClear",$("#AuditACLAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("autoClearDays",$("#AuditACLDaysAttr").val());
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].childNodes[0].nodeValue = $("#ErrorNode").val();
-        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("AutoClear",$("#ErrorACLAttr").val());
-        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("AutoClearDays",$("#ErrorACLDaysAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("autoClear",$("#ErrorACLAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("autoClearDays",$("#ErrorACLDaysAttr").val());
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue = $("#TransactionNode").val();
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].setAttribute("enable",$("#TransactionEnableAttr").val());
 
