@@ -74,7 +74,7 @@
                             <tr>
                                 <td class="lableTD">Enable : </td>
                                 <td>
-                                    <select id="TransactionEnableAttr">
+                                    <select id="TransactionEnableAttr" onchange="TransactionLogEnableToggle()">
                                         <option value="True" selected>Yes</option>
                                         <option value="False">No</option>
                                     </select>
@@ -100,14 +100,14 @@
                                 <tr>
                                     <td class="lableTD">Enable : </td>
                                     <td>
-                                        <select id="AuditEnableAttr">
+                                        <select id="AuditEnableAttr" onchange="AuditLogEnableToggle()">
                                             <option value="True">Yes</option>
                                             <option value="False">No</option>
                                         </select>
                                     </td>
                                     <td class="lableTD">Auto - Clear Logs : </td>
                                     <td>
-                                        <select id="AuditACLAttr">
+                                        <select id="AuditACLAttr" onchange="AuditACLToggle()">
                                             <option value="True">Yes</option>
                                             <option value="False">No</option>
                                         </select>
@@ -142,7 +142,7 @@
                                 </td>
                                 <td class="lableTD">Auto - Clear Logs : </td>
                                 <td>
-                                    <select id="ErrorACLAttr">
+                                    <select id="ErrorACLAttr" onchange="ErrorACLToggle()">
                                         <option value="True">Yes</option>
                                         <option value="False">No</option>
                                     </select>
@@ -188,6 +188,7 @@
             }
         });
     });
+
     function ActivateParseXML(){
         var inputXML = $("#ipXML").val();
         if(inputXML==""){
@@ -209,6 +210,11 @@
         $("#LogsValueNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Value")[0].childNodes[0].nodeValue);
         $("#TransactionNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue);
         $("#TransactionEnableAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].getAttribute("enable"));
+
+
+        TransactionLogEnableToggle();
+        AuditLogEnableToggle();
+        ErrorACLToggle();
 
         $("#loadXML").css("display","none");
         $("#parseXML").css("display","block");
@@ -235,6 +241,39 @@
         $("#outputXML").css("display","block");
         $("#opXML").val(new XMLSerializer().serializeToString(xmlDoc));
     }
+    function TransactionLogEnableToggle(){
+        if($("#TransactionEnableAttr").val() == "True"){
+            $("#TransactionNode").prop("disabled", false);
+        } else {
+            $("#TransactionNode").prop("disabled", true);
+        }
+    }
+    function AuditLogEnableToggle(){
+        if($("#AuditEnableAttr").val() == "True"){
+            $("#AuditACLAttr").prop("disabled", false);
+            $("#AuditNode").prop("disabled", false);
+            AuditACLToggle();
+        } else {
+            $("#AuditACLAttr").prop("disabled", true);
+            $("#AuditACLDaysAttr").prop("disabled", true);
+            $("#AuditNode").prop("disabled", true);
+        }
+    }
+    function AuditACLToggle(){
+        if($("#AuditACLAttr").val() == "True"){
+            $("#AuditACLDaysAttr").prop("disabled", false);
+        } else {
+            $("#AuditACLDaysAttr").prop("disabled", true);
+        }
+    }
+    function ErrorACLToggle(){
+        if($("#ErrorACLAttr").val() == "True"){
+            $("#ErrorACLDaysAttr").prop("disabled", false);
+        } else {
+            $("#ErrorACLDaysAttr").prop("disabled", true);
+        }
+    }
+
 </script>
 </body>
 </html>
