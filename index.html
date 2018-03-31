@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bot Initializer - Wipro</title>
+    <script src="jquery-3.3.1.min.js"></script>
+    <style>
+        .pullcenter {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .folderPathInput{
+            width: 100%;
+
+        }
+        .lableTD{
+            width: 150px;
+            text-align: center;
+        }
+        .lableTDheader{
+            width: 150px;
+            text-align: center;
+            font-weight: bold;
+        }
+        table, td, th {
+            border: 5px solid #007bb6;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadXML">
+        <h2 style="text-align: center">Enter you XML here</h2>
+        <textarea class="pullcenter" rows="35" cols="150" id="ipXML"></textarea> <br><br>
+        <img src="arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateParseXML()">
+    </div>
+    <div id="parseXML">
+        <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+            <tbody>
+                <tr>
+                    <td class="lableTD">Input : </td>
+                    <td> <input id="inputNode" class="folderPathInput"></td>
+                    <td class="lableTD">Output : </td>
+                    <td> <input id="outputNode" class="folderPathInput"></td>
+                </tr>
+                <tr>
+                    <td class="lableTD">Temp : </td>
+                    <td> <input id="tempNode" class="folderPathInput"></td>
+                    <td class="lableTD">Template : </td>
+                    <td> <input id="templateNode" class="folderPathInput"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+                            <tbody>
+                            <tr>
+                                <td colspan="2" class="lableTDheader">Logs</td>
+                            </tr>
+                            <tr>
+                                <td class="lableTD">Root Folder Path : </td>
+                                <td>
+                                    <input id="LogsValueNode" class="folderPathInput">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td colspan="2">
+                        <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+                            <tbody>
+                            <tr>
+                                <td colspan="4" class="lableTDheader">Transaction Log</td>
+                            </tr>
+                            <tr>
+                                <td class="lableTD">Enable : </td>
+                                <td>
+                                    <select id="TransactionEnableAttr">
+                                        <option value="True" selected>Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </td>
+                                <td class="lableTD">
+                                    Log Path :
+                                </td>
+                                <td colspan="5">
+                                    <input id="TransactionNode" class="folderPathInput">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+                            <tbody>
+                                <tr>
+                                   <td colspan="6" class="lableTDheader">Audit Log</td>
+                                </tr>
+                                <tr>
+                                    <td class="lableTD">Enable : </td>
+                                    <td>
+                                        <select id="AuditEnableAttr">
+                                            <option value="True">Yes</option>
+                                            <option value="False">No</option>
+                                        </select>
+                                    </td>
+                                    <td class="lableTD">Auto - Clear Logs : </td>
+                                    <td>
+                                        <select id="AuditACLAttr">
+                                            <option value="True">Yes</option>
+                                            <option value="False">No</option>
+                                        </select>
+                                    </td>
+                                    <td class="lableTD">Auto - Clear Interval : </td>
+                                    <td><select class="0To500" id="AuditACLDaysAttr"></select></td>
+                                </tr>
+                                <tr>
+                                    <td class="lableTD">
+                                        Log Path :
+                                    </td>
+                                    <td colspan="5">
+                                        <input id="AuditNode" class="folderPathInput">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td colspan="2">
+                        <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+                            <tbody>
+                            <tr>
+                                <td colspan="6" class="lableTDheader">Error Log</td>
+                            </tr>
+                            <tr>
+                                <td class="lableTD">Enable : </td>
+                                <td>
+                                    <select disabled id="ErrorEnableAttr">
+                                        <option value="True" selected>Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </td>
+                                <td class="lableTD">Auto - Clear Logs : </td>
+                                <td>
+                                    <select id="ErrorACLAttr">
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </td>
+                                <td class="lableTD">Auto - Clear Interval : </td>
+                                <td><select class="0To500" id="ErrorACLDaysAttr"></select></td>
+                            </tr>
+                            <tr>
+                                <td class="lableTD">
+                                    Log Path :
+                                </td>
+                                <td colspan="5">
+                                    <input id="ErrorNode" class="folderPathInput">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+       <br><br>
+        <img src="arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateOutputXML()">
+    </div>
+    <div id="outputXML">
+        <h2 style="text-align: center">Your final output XML is ready below</h2>
+        <textarea class="pullcenter" rows="35" cols="150" id="opXML"></textarea> <br>
+        <h2 style="text-align: center">Please copy paste this in your target XML file</h2>
+    </div>
+<script type="application/javascript">
+    var inputXML = "";
+    var parser = new DOMParser();
+    var xmlDoc;
+
+    $( document ).ready(function() {
+        $("#loadXML").css("display","block");
+        $("#parseXML").css("display","none");
+        $("#outputXML").css("display","none");
+
+        $(".0To500").each(function(index,value){
+            for (i=0;i<=500;i++){
+                $(value).append($('<option></option>').val(i).html(i))
+            }
+        });
+    });
+    function ActivateParseXML(){
+        var inputXML = $("#ipXML").val();
+        if(inputXML==""){
+            alert("Input XML is empty! Please paste your XML and Proceed.");
+            return;
+        }
+        xmlDoc = parser.parseFromString(inputXML,"text/xml");
+        $("#inputNode").val(xmlDoc.getElementsByTagName("Input")[0].childNodes[0].nodeValue);
+        $("#outputNode").val(xmlDoc.getElementsByTagName("Output")[0].childNodes[0].nodeValue);
+        $("#tempNode").val(xmlDoc.getElementsByTagName("Temp")[0].childNodes[0].nodeValue);
+        $("#templateNode").val(xmlDoc.getElementsByTagName("Template")[0].childNodes[0].nodeValue);
+        $("#AuditNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].childNodes[0].nodeValue);
+        $("#ErrorNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].childNodes[0].nodeValue);
+        $("#AuditEnableAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("enable"));
+        $("#AuditACLAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("AutoClear"));
+        $("#ErrorACLAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].getAttribute("AutoClear"));
+        $("#AuditACLDaysAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].getAttribute("AutoClearDays"));
+        $("#ErrorACLDaysAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].getAttribute("AutoClearDays"));
+        $("#LogsValueNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Value")[0].childNodes[0].nodeValue);
+        $("#TransactionNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue);
+        $("#TransactionEnableAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].getAttribute("enable"));
+
+        $("#loadXML").css("display","none");
+        $("#parseXML").css("display","block");
+        $("#outputXML").css("display","none");
+    }
+    function ActivateOutputXML(){
+        xmlDoc.getElementsByTagName("Input")[0].childNodes[0].nodeValue = $("#inputNode").val();
+        xmlDoc.getElementsByTagName("Output")[0].childNodes[0].nodeValue = $("#outputNode").val();
+        xmlDoc.getElementsByTagName("Temp")[0].childNodes[0].nodeValue = $("#tempNode").val();
+        xmlDoc.getElementsByTagName("Template")[0].childNodes[0].nodeValue = $("#templateNode").val();
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Value")[0].childNodes[0].nodeValue = $("#LogsValueNode").val();
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].childNodes[0].nodeValue = $("#AuditNode").val();
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("enable",$("#AuditEnableAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("AutoClear",$("#AuditACLAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Audit")[0].setAttribute("AutoClearDays",$("#AuditACLDaysAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].childNodes[0].nodeValue = $("#ErrorNode").val();
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("AutoClear",$("#ErrorACLAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("AutoClearDays",$("#ErrorACLDaysAttr").val());
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue = $("#TransactionNode").val();
+        xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].setAttribute("enable",$("#TransactionEnableAttr").val());
+
+        $("#loadXML").css("display","none");
+        $("#parseXML").css("display","none");
+        $("#outputXML").css("display","block");
+        $("#opXML").val(new XMLSerializer().serializeToString(xmlDoc));
+    }
+</script>
+</body>
+</html>
