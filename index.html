@@ -178,24 +178,20 @@
                 <tr>
                     <td colspan="4">
                         <fieldset>
-                            <legend>Development Environment Applications</legend>
+                            <legend>Applications Configured (Count : <span id="AppsConfiguredCount"></span>)</legend>
+                            <p style="text-align: right"><button onclick="AddAppToGrid('','','','')"> + Add New App</button> </p>
+                            <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+                                <thead>
+                                    <th>Application Name</th>
+                                    <th>Development Path</th>
+                                    <th>UAT Path</th>
+                                    <th>Production Path</th>
+                                    <th>Delete</th>
+                                </thead>
+                                <tbody id="AppsConfiguredBody">
 
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <fieldset>
-                            <legend>UAT Environment Applications</legend>
-
-                        </fieldset>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <fieldset>
-                            <legend>Production Environment Applications</legend>
-
+                                </tbody>
+                            </table>
                         </fieldset>
                     </td>
                 </tr>
@@ -213,6 +209,7 @@
     var inputXML = "";
     var parser = new DOMParser();
     var xmlDoc;
+    var AppsConfiguredCount = 0;
 
     $( document ).ready(function() {
         $("#loadXML").css("display","block");
@@ -248,7 +245,20 @@
         $("#LogsValueNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue);
         $("#TransactionNode").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue);
         $("#TransactionEnableAttr").val(xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].getAttribute("enable"));
+        $("#DebugFlagNode").val(xmlDoc.getElementsByTagName("DebugFlag")[0].childNodes[0].nodeValue);
 
+        if(xmlDoc.getElementsByTagName("CurrentExecutionEnvironment")[0].childNodes[0].nodeValue=="Development"){
+            $("#CurrExecEnvDevelopment").prop("checked",true);
+        } else if(xmlDoc.getElementsByTagName("CurrentExecutionEnvironment")[0].childNodes[0].nodeValue=="UAT") {
+            $("#CurrExecEnvUAT").prop("checked",true);
+        } else {
+            $("#CurrExecEnvProduction").prop("checked",true);
+        }
+
+        for(i=0;i<=100;i++){
+            if(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i] == undefined) break ;
+            AddAppToGrid(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].getAttribute("name"),xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue,xmlDoc.getElementsByTagName("Environment")[1].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue,xmlDoc.getElementsByTagName("Environment")[2].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue)
+        }
 
         TransactionLogEnableToggle();
         AuditLogEnableToggle();
@@ -274,6 +284,40 @@
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Error")[0].setAttribute("autoClearDays",$("#ErrorACLDaysAttr").val());
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].childNodes[0].nodeValue = $("#TransactionNode").val();
         xmlDoc.getElementsByTagName("Logs")[0].getElementsByTagName("Transaction")[0].setAttribute("enable",$("#TransactionEnableAttr").val());
+        xmlDoc.getElementsByTagName("DebugFlag")[0].childNodes[0].nodeValue = $("#DebugFlagNode").val();
+
+        if($("#CurrExecEnvDevelopment").prop("checked")){
+            xmlDoc.getElementsByTagName("CurrentExecutionEnvironment")[0].childNodes[0].nodeValue="Development";
+        } else if ($("#CurrExecEnvUAT").prop("checked")){
+            xmlDoc.getElementsByTagName("CurrentExecutionEnvironment")[0].childNodes[0].nodeValue="UAT";
+        } else {
+            xmlDoc.getElementsByTagName("CurrentExecutionEnvironment")[0].childNodes[0].nodeValue="Production";
+        }
+
+        for(i=0;i<=100;i++){
+            if(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[0] == undefined) break ;
+            xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[0].remove();
+            xmlDoc.getElementsByTagName("Environment")[1].getElementsByTagName("Applications")[0].getElementsByTagName("App")[0].remove();
+            xmlDoc.getElementsByTagName("Environment")[2].getElementsByTagName("Applications")[0].getElementsByTagName("App")[0].remove();
+        }
+
+        for(i=0;i<$("#AppsConfiguredBody tr").length;i++){
+            var devTag = xmlDoc.createElement("App");
+            devTag.setAttribute("name",$("#AppsConfiguredBody tr")[i].getElementsByTagName("td")[0].getElementsByTagName("input")[0].value);
+            devTag.appendChild(xmlDoc.createTextNode($("#AppsConfiguredBody tr")[i].getElementsByTagName("td")[1].getElementsByTagName("input")[0].value));
+
+            var uatTag = xmlDoc.createElement("App");
+            uatTag.setAttribute("name",$("#AppsConfiguredBody tr")[i].getElementsByTagName("td")[0].getElementsByTagName("input")[0].value);
+            uatTag.appendChild(xmlDoc.createTextNode($("#AppsConfiguredBody tr")[i].getElementsByTagName("td")[2].getElementsByTagName("input")[0].value));
+
+            var prodTag = xmlDoc.createElement("App");
+            prodTag.setAttribute("name",$("#AppsConfiguredBody tr")[i].getElementsByTagName("td")[0].getElementsByTagName("input")[0].value);
+            prodTag.appendChild(xmlDoc.createTextNode($("#AppsConfiguredBody tr")[i].getElementsByTagName("td")[3].getElementsByTagName("input")[0].value));
+
+            xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].appendChild(devTag);
+            xmlDoc.getElementsByTagName("Environment")[1].getElementsByTagName("Applications")[0].appendChild(uatTag);
+            xmlDoc.getElementsByTagName("Environment")[2].getElementsByTagName("Applications")[0].appendChild(prodTag);
+        }
 
         $("#loadXML").css("display","none");
         $("#parseXML").css("display","none");
@@ -311,6 +355,17 @@
         } else {
             $("#ErrorACLDaysAttr").prop("disabled", true);
         }
+    }
+    function AddAppToGrid(AppName,DevPath,UATPath,ProdPath){
+        var tmpTag = "<tr><td><input value='"+AppName+"' class='folderPathInput'></td><td><input value='"+DevPath+"' class='folderPathInput'></td><td><input value='"+UATPath+"' class='folderPathInput'></td><td><input value='"+ProdPath+"' class='folderPathInput'></td><td style='text-align: center'><button onclick='DeleteAppFromGrid(this)'>X</button> </td></tr>";
+        $("#AppsConfiguredBody").html($("#AppsConfiguredBody").html()+tmpTag);
+        AppsConfiguredCount++;
+        $("#AppsConfiguredCount").html(AppsConfiguredCount);
+    }
+    function DeleteAppFromGrid(AppObj){
+        AppObj.parentNode.parentNode.remove();
+        AppsConfiguredCount--;
+        $("#AppsConfiguredCount").html(AppsConfiguredCount);
     }
 
 </script>
