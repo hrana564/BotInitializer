@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Bot Initializer - Wipro</title>
     <script src="jquery-3.3.1.min.js"></script>
+    <script src="CryptoJS.js"></script>
     <style>
         .pullcenter {
             display: block;
@@ -25,6 +26,71 @@
         }
         table, td, th {
             border: 5px solid #007bb6;
+        }
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-header {
+            padding: 2px 16px;
+            background-color: red;
+            color: white;
+        }
+
+        .modal-body {padding: 2px 16px;}
+
+        /* Add Animation */
+        @-webkit-keyframes slideIn {
+            from {bottom: -300px; opacity: 0}
+            to {bottom: 0; opacity: 1}
+        }
+
+        @keyframes slideIn {
+            from {bottom: -300px; opacity: 0}
+            to {bottom: 0; opacity: 1}
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0}
+            to {opacity: 1}
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0}
+            to {opacity: 1}
         }
     </style>
 </head>
@@ -195,10 +261,92 @@
                         </fieldset>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="4">
+                        <fieldset>
+                            <legend>Secured Credential Vault</legend>
+                            <p >Search Credentials(Enter your key)
+                                <input type="password" id="myPasscode" >
+                                <button onclick="">Search</button>
+                                <button style="float: right;" onclick="AddNewCredentials()"> + Add New Credentials</button> </p>
+                            <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
+                                <thead>
+                                <th>Application Name</th>
+                                <th>Development Path</th>
+                                <th>UAT Path</th>
+                                <th>Production Path</th>
+                                <th>Delete</th>
+                                </thead>
+                                <tbody id="AppsConfiguredBody">
+
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </td>
+                </tr>
             </tbody>
         </table>
        <br><br>
         <img src="arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateOutputXML()">
+        <!-- The Credential Modal -->
+        <div id="credentialModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="CloseCredentialModal()">&times;</span>
+                    <h2>Secured Credential Vault Manager</h2>
+                </div>
+                <div class="modal-body" style="border: 1px solid red;padding: 10px;">
+                    <table cellpadding="10">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Credential Name (Unique) :
+                                </td>
+                                <td>
+                                    <input type="hidden" id="currentCredentialModalMode">
+                                    <input type="text" id="credentialName">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Credential Description :
+                                </td>
+                                <td>
+                                    <input type="text" id="credentialDescription">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Credential Secret Key :
+                                </td>
+                                <td>
+                                    <input type="password" id="credentialSecretKey">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Credential :
+                                </td>
+                                <td>
+                                    <input type="password" id="credentialActual">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button onclick="SaveCredentials()">Save Credential</button>
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </div>
     <div id="outputXML">
         <h2 style="text-align: center">Your final output XML is ready below</h2>
@@ -366,6 +514,45 @@
         AppObj.parentNode.parentNode.remove();
         AppsConfiguredCount--;
         $("#AppsConfiguredCount").html(AppsConfiguredCount);
+    }
+    function AddNewCredentials(){
+        OpenCredentialModal();
+        document.getElementById("currentCredentialModalMode").value = "Add";
+        $("#credentialName").prop("disabled", false);
+    }
+    function UpdateCurrentCredentials(){
+        OpenCredentialModal();
+        document.getElementById("currentCredentialModalMode").value = "Update";
+        $("#credentialName").prop("disabled", true);
+    }
+    function SaveCredentials(){
+        if(document.getElementById("currentCredentialModalMode").value == "Add"){
+            var credentialTag = xmlDoc.createElement("Credential");
+            var credentialName = xmlDoc.createElement("CredentialName");
+            credentialName.appendChild(xmlDoc.createTextNode($("#credentialName").val()));
+            var credentialDescription = xmlDoc.createElement("CredentialDescription");
+            credentialDescription.appendChild(xmlDoc.createTextNode($("#credentialDescription").val()));
+            var credentialActual = xmlDoc.createElement("CredentialActual");
+            credentialActual.appendChild(xmlDoc.createTextNode(CryptoJS.AES.encrypt($("#credentialActual").val(), $("#credentialSecretKey").val())));
+            credentialTag.appendChild(credentialName);
+            credentialTag.appendChild(credentialDescription);
+            credentialTag.appendChild(credentialActual);
+            xmlDoc.getElementsByTagName("Credentials")[0].appendChild(credentialTag);
+        } else{
+
+        }
+        CloseCredentialModal();
+    }
+    function OpenCredentialModal(){
+        document.getElementById('credentialModal').style.display = "block";
+    }
+    function CloseCredentialModal(){
+        document.getElementById('credentialModal').style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('credentialModal')) {
+            document.getElementById('credentialModal').style.display = "none";
+        }
     }
 
 </script>
