@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Bot Initializer - Wipro</title>
-    <script src="jquery-3.3.1.min.js"></script>
-    <script src="CryptoJS.js"></script>
+    <script src="Internal/jquery-3.3.1.min.js"></script>
+    <script src="Internal/CryptoJS.js"></script>
     <style>
         .pullcenter {
             display: block;
@@ -96,12 +96,12 @@
 </head>
 <body>
     <div>
-        <h1 style="text-align: center;border-bottom: 1px solid black;padding-bottom: 40px;"><img src="WiproLogo" align="middle" style="float: left;"> Wipro RPA - AA Bot Initializer</h1>
+        <h1 style="text-align: center;border-bottom: 1px solid black;padding-bottom: 40px;"><img src="Internal/WiproLogo" align="middle" style="float: left;"> Wipro RPA - AA Bot Initializer</h1>
     </div>
     <div id="loadXML">
         <h2 style="text-align: center">Enter you XML here</h2>
         <textarea class="pullcenter" rows="20" cols="150" id="ipXML"></textarea> <br><br>
-        <img src="arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateParseXML()">
+        <img src="Internal/arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateParseXML()">
     </div>
     <div id="parseXML">
         <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
@@ -264,20 +264,19 @@
                 <tr>
                     <td colspan="4">
                         <fieldset>
-                            <legend>Secured Credential Vault</legend>
+                            <legend>Secure Credential Vault</legend>
                             <p >Search Credentials(Enter your key)
-                                <input type="password" id="myPasscode" >
-                                <button onclick="">Search</button>
+                                <input type="password" id="myPasscode">
+                                <button onclick="SearchCredentials()">Search</button>
                                 <button style="float: right;" onclick="AddNewCredentials()"> + Add New Credentials</button> </p>
                             <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
                                 <thead>
-                                <th>Application Name</th>
-                                <th>Development Path</th>
-                                <th>UAT Path</th>
-                                <th>Production Path</th>
-                                <th>Delete</th>
+                                    <th>Credential Name(Unique)</th>
+                                    <th>Credential Description</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
                                 </thead>
-                                <tbody id="AppsConfiguredBody">
+                                <tbody id="CredentialsConfiguredBody">
 
                                 </tbody>
                             </table>
@@ -287,7 +286,7 @@
             </tbody>
         </table>
        <br><br>
-        <img src="arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateOutputXML()">
+        <img src="Internal/arrow_right.png" class="pullcenter" width="200" height="60" style="cursor: pointer" onclick="ActivateOutputXML()">
         <!-- The Credential Modal -->
         <div id="credentialModal" class="modal">
 
@@ -333,16 +332,12 @@
                                     <input type="password" id="credentialActual">
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <button onclick="SaveCredentials()">Save Credential</button>
-                                </td>
-                                <td>
-                                    &nbsp;
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
+                    <br />
+                    <button onclick="SaveCredentials()">Save Credential</button>
+                    <br />
+                    <br />
                 </div>
             </div>
 
@@ -505,7 +500,7 @@
         }
     }
     function AddAppToGrid(AppName,DevPath,UATPath,ProdPath){
-        var tmpTag = "<tr><td><input value='"+AppName+"' class='folderPathInput'></td><td><input value='"+DevPath+"' class='folderPathInput'></td><td><input value='"+UATPath+"' class='folderPathInput'></td><td><input value='"+ProdPath+"' class='folderPathInput'></td><td style='text-align: center'><button onclick='DeleteAppFromGrid(this)'>X</button> </td></tr>";
+        var tmpTag = "<tr><td><input value='"+AppName+"' class='folderPathInput'></td><td><input value='"+DevPath+"' class='folderPathInput'></td><td><input value='"+UATPath+"' class='folderPathInput'></td><td><input value='"+ProdPath+"' class='folderPathInput'></td><td style='text-align: center'><button onclick='DeleteAppFromGrid(this)'><img src='Internal/delete.png' style='width: 25px;height: 25px;'></button> </td></tr>";
         $("#AppsConfiguredBody").html($("#AppsConfiguredBody").html()+tmpTag);
         AppsConfiguredCount++;
         $("#AppsConfiguredCount").html(AppsConfiguredCount);
@@ -520,10 +515,22 @@
         document.getElementById("currentCredentialModalMode").value = "Add";
         $("#credentialName").prop("disabled", false);
     }
-    function UpdateCurrentCredentials(){
+    function UpdateCurrentCredentials(CredName,CredDesc){
         OpenCredentialModal();
         document.getElementById("currentCredentialModalMode").value = "Update";
+        document.getElementById("credentialName").value = CredName;
+        document.getElementById("credentialDescription").value = CredDesc;
         $("#credentialName").prop("disabled", true);
+    }
+    function DeleteCredentials(CredObj,CredName){
+        for(i=0;i<=100;i++) {
+            if (xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i] == undefined) break;
+            if(xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue==CredName){
+                xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].remove();
+                break;
+            }
+        }
+        CredObj.parentNode.parentNode.remove();
     }
     function SaveCredentials(){
         if(document.getElementById("currentCredentialModalMode").value == "Add"){
@@ -533,13 +540,18 @@
             var credentialDescription = xmlDoc.createElement("CredentialDescription");
             credentialDescription.appendChild(xmlDoc.createTextNode($("#credentialDescription").val()));
             var credentialActual = xmlDoc.createElement("CredentialActual");
-            credentialActual.appendChild(xmlDoc.createTextNode(CryptoJS.AES.encrypt($("#credentialActual").val(), $("#credentialSecretKey").val())));
+            credentialActual.appendChild(xmlDoc.createTextNode(CryptoJS.AES.encrypt("###PASSWORD START###"+$("#credentialActual").val()+"###PASSWORD END###", $("#credentialSecretKey").val())));
             credentialTag.appendChild(credentialName);
             credentialTag.appendChild(credentialDescription);
             credentialTag.appendChild(credentialActual);
             xmlDoc.getElementsByTagName("Credentials")[0].appendChild(credentialTag);
         } else{
-
+            for(i=0;i<=100;i++) {
+                if (xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i] == undefined) break;
+                if(xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue==$("#credentialName").val()){
+                    xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialActual")[0].childNodes[0].nodeValue = CryptoJS.AES.encrypt("###PASSWORD START###"+$("#credentialActual").val()+"###PASSWORD END###", $("#credentialSecretKey").val());
+                }
+            }
         }
         CloseCredentialModal();
     }
@@ -548,11 +560,28 @@
     }
     function CloseCredentialModal(){
         document.getElementById('credentialModal').style.display = "none";
+        SearchCredentials();
     }
     window.onclick = function(event) {
         if (event.target == document.getElementById('credentialModal')) {
-            document.getElementById('credentialModal').style.display = "none";
+            CloseCredentialModal();
         }
+    };
+    function SearchCredentials(){
+        var secretKey = $("#myPasscode").val();
+        $("#CredentialsConfiguredBody").html("");
+        for(i=0;i<=100;i++) {
+            if (xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i] == undefined) break;
+            var deCypheredText = CryptoJS.AES.decrypt(xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialActual")[0].childNodes[0].nodeValue, secretKey).toString(CryptoJS.enc.Utf8);
+            if(deCypheredText.indexOf("###PASSWORD START###")>=0 && deCypheredText.indexOf("###PASSWORD END###")>=0){
+                var tmpTag = "<tr><td style='text-align: center'>"+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"</td><td style='text-align: center'>"+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue+"</td><td style='text-align: center'><button onclick='UpdateCurrentCredentials(\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"\",\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue+"\")'><img src='Internal/edit.png' style='width: 25px;height: 25px;'></button></td><td style='text-align: center'> <button onclick='DeleteCredentials(this,\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"\")'><img src='Internal/delete.png' style='width: 25px;height: 25px;'></button> </td></tr>";
+                $("#CredentialsConfiguredBody").html($("#CredentialsConfiguredBody").html()+tmpTag);
+            }
+        }
+    }
+    function AddCredentialToGrid(credentialName, credentialDescription){
+        AppsConfiguredCount++;
+        $("#AppsConfiguredCount").html(AppsConfiguredCount);
     }
 
 </script>
