@@ -265,7 +265,7 @@
                     <td colspan="4">
                         <fieldset>
                             <legend>Secure Credential Vault</legend>
-                            <p >Search Credentials(Enter your key)
+                            <p >Search Credentials(Enter your Secret Key)
                                 <input type="password" id="myPasscode">
                                 <button onclick="SearchCredentials()">Search</button>
                                 <button style="float: right;" onclick="AddNewCredentials()"> + Add New Credentials</button> </p>
@@ -400,7 +400,13 @@
 
         for(i=0;i<=100;i++){
             if(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i] == undefined) break ;
-            AddAppToGrid(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].getAttribute("name"),xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue,xmlDoc.getElementsByTagName("Environment")[1].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue,xmlDoc.getElementsByTagName("Environment")[2].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue)
+            var devAppPath = "";
+            var uatAppPath = "";
+            var prodAppPath = "";
+            if(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0] != undefined) devAppPath = xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue;
+            if(xmlDoc.getElementsByTagName("Environment")[1].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0] != undefined) uatAppPath = xmlDoc.getElementsByTagName("Environment")[1].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue;
+            if(xmlDoc.getElementsByTagName("Environment")[2].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0] != undefined) prodAppPath = xmlDoc.getElementsByTagName("Environment")[2].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].childNodes[0].nodeValue;
+            AddAppToGrid(xmlDoc.getElementsByTagName("Environment")[0].getElementsByTagName("Applications")[0].getElementsByTagName("App")[i].getAttribute("name"),devAppPath,uatAppPath,prodAppPath);
         }
 
         TransactionLogEnableToggle();
@@ -412,6 +418,52 @@
         $("#outputXML").css("display","none");
     }
     function ActivateOutputXML(){
+        if($("#inputNode").val() == ""){
+            alert("Input Folder Path is Mandatory!");
+            return;
+        }
+        if($("#outputNode").val() == ""){
+            alert("Output Folder Path is Mandatory!");
+            return;
+        }
+        if($("#tempNode").val() == ""){
+            alert("Temp Folder Path is Mandatory!");
+            return;
+        }
+        if($("#templateNode").val() == ""){
+            alert("Template Folder Path is Mandatory!");
+            return;
+        }
+        if($("#MyDocsNode").val() == ""){
+            alert("My Docs Root Folder Path is Mandatory!");
+            return;
+        }
+        if($("#LogsValueNode").val() == ""){
+            alert("Logs Root Folder Path is Mandatory!");
+            return;
+        }
+        if($("#AuditNode").val() == ""){
+            alert("Audit Logs Folder Path is Mandatory!");
+            return;
+        }
+        if($("#ErrorNode").val() == ""){
+            alert("Error Logs Folder Path is Mandatory!");
+            return;
+        }
+        if($("#TransactionNode").val() == ""){
+            alert("Transaction Logs Folder Path is Mandatory!");
+            return;
+        }
+        if($("#MyDocsNode").val() == ""){
+            alert("My Docs Root Folder Path is Mandatory!");
+            return;
+        }
+        for(var i=0;i<document.getElementById("AppsConfiguredBody").getElementsByTagName("tr").length;i++){
+            if(document.getElementById("AppsConfiguredBody").getElementsByTagName("tr")[i].getElementsByTagName("input")[0].value==""){
+                alert("Application Name is Mandatory for all the configured Applications.");
+                return;
+            }
+        }
         xmlDoc.getElementsByTagName("Input")[0].childNodes[0].nodeValue = $("#inputNode").val();
         xmlDoc.getElementsByTagName("Output")[0].childNodes[0].nodeValue = $("#outputNode").val();
         xmlDoc.getElementsByTagName("Temp")[0].childNodes[0].nodeValue = $("#tempNode").val();
@@ -534,6 +586,7 @@
     }
     function SaveCredentials(){
         if(document.getElementById("currentCredentialModalMode").value == "Add"){
+            if(!CredentialModalAllFieldsFilled()) return;
             var credentialTag = xmlDoc.createElement("Credential");
             var credentialName = xmlDoc.createElement("CredentialName");
             credentialName.appendChild(xmlDoc.createTextNode($("#credentialName").val()));
@@ -546,19 +599,59 @@
             credentialTag.appendChild(credentialActual);
             xmlDoc.getElementsByTagName("Credentials")[0].appendChild(credentialTag);
         } else{
+            var updateOnlyDescription = false;
+            if($("#credentialSecretKey").val()=="" && $("#credentialActual").val()==""){
+                if($("#credentialDescription").val() == ""){
+                    alert("Credential Description is Mandatory");
+                    return;
+                }
+                updateOnlyDescription = true;
+            } else {
+                if(!CredentialModalAllFieldsFilled()) return;
+            }
             for(i=0;i<=100;i++) {
                 if (xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i] == undefined) break;
                 if(xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue==$("#credentialName").val()){
-                    xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialActual")[0].childNodes[0].nodeValue = CryptoJS.AES.encrypt("###PASSWORD START###"+$("#credentialActual").val()+"###PASSWORD END###", $("#credentialSecretKey").val());
+                    if(!updateOnlyDescription){
+                        xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialActual")[0].childNodes[0].nodeValue = CryptoJS.AES.encrypt("###PASSWORD START###"+$("#credentialActual").val()+"###PASSWORD END###", $("#credentialSecretKey").val());
+                    }
+                    xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue = $("#credentialDescription").val();
                 }
             }
         }
         CloseCredentialModal();
     }
+    function CredentialModalAllFieldsFilled(){
+        if($("#credentialName").val()==""){
+            alert("Credential Name is Mandatory!");
+            return false;
+        }
+        if($("#credentialDescription").val()==""){
+            alert("Credential Description is Mandatory!");
+            return false;
+        }
+        if($("#credentialSecretKey").val()==""){
+            alert("Credential Secret Key is Mandatory!");
+            return false;
+        }
+        if($("#credentialActual").val()==""){
+            alert("Credential is Mandatory!");
+            return false;
+        }
+        return true;
+    }
     function OpenCredentialModal(){
+        ClearCredentialsModal();
         document.getElementById('credentialModal').style.display = "block";
     }
+    function ClearCredentialsModal(){
+        $("#credentialName").val("");
+        $("#credentialDescription").val("");
+        $("#credentialSecretKey").val("");
+        $("#credentialActual").val("");
+    }
     function CloseCredentialModal(){
+        ClearCredentialsModal();
         document.getElementById('credentialModal').style.display = "none";
         SearchCredentials();
     }
@@ -568,6 +661,10 @@
         }
     };
     function SearchCredentials(){
+        if($("#myPasscode").val() == ""){
+            alert("Please enter your Secret Key and then press Search.");
+            return;
+        }
         var secretKey = $("#myPasscode").val();
         $("#CredentialsConfiguredBody").html("");
         for(i=0;i<=100;i++) {
