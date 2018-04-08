@@ -13,19 +13,23 @@
         }
         .folderPathInput{
             width: 100%;
-
         }
         .lableTD{
             width: 150px;
             text-align: center;
+            background-color: antiquewhite;
+        }
+        .valueTD{
+            background-color: lavender;
         }
         .lableTDheader{
             width: 150px;
             text-align: center;
             font-weight: bold;
+            background-color: deepskyblue;
         }
         table, td, th {
-            border: 5px solid #007bb6;
+            border: 3px solid #007bb6;
         }
         /* The Modal (background) */
         .modal {
@@ -96,7 +100,9 @@
 </head>
 <body>
     <div>
-        <h1 style="text-align: center;border-bottom: 1px solid black;padding-bottom: 40px;"><img src="Internal/WiproLogo" align="middle" style="float: left;"> Wipro RPA - AA Bot Initializer</h1>
+        <h1 style="text-align: center;border-bottom: 1px solid black;padding-bottom: 40px;margin: 0px;"><img src="Internal/WiproLogo" align="middle" style="float: left;">
+            <p style="margin: 0;vertical-align: middle;padding-top: 15px;">Wipro RPA - AA Bot Initializer</p>
+        </h1>
     </div>
     <div id="loadXML">
         <h2 style="text-align: center">Enter you XML here</h2>
@@ -108,19 +114,19 @@
             <tbody>
                 <tr>
                     <td class="lableTD">Input : </td>
-                    <td> <input id="inputNode" class="folderPathInput"></td>
+                    <td class="valueTD"> <input id="inputNode" class="folderPathInput"></td>
                     <td class="lableTD">Output : </td>
-                    <td> <input id="outputNode" class="folderPathInput"></td>
+                    <td class="valueTD"> <input id="outputNode" class="folderPathInput"></td>
                 </tr>
                 <tr>
                     <td class="lableTD">Temp : </td>
-                    <td> <input id="tempNode" class="folderPathInput"></td>
+                    <td class="valueTD"> <input id="tempNode" class="folderPathInput"></td>
                     <td class="lableTD">Template : </td>
-                    <td> <input id="templateNode" class="folderPathInput"></td>
+                    <td class="valueTD"> <input id="templateNode" class="folderPathInput"></td>
                 </tr>
                 <tr>
                     <td class="lableTD">MyDocs Root Folder Path : </td>
-                    <td>
+                    <td class="valueTD">
                         <input id="MyDocsNode" class="folderPathInput">
                     </td>
                     <td colspan="2" rowspan="2">
@@ -129,7 +135,7 @@
                             <tr>
                                 <td class="lableTDheader">Transaction Log</td>
                                 <td class="lableTD">Enable : </td>
-                                <td>
+                                <td class="valueTD">
                                     <select id="TransactionEnableAttr" onchange="TransactionLogEnableToggle()">
                                         <option value="True" selected>Yes</option>
                                         <option value="False">No</option>
@@ -140,7 +146,7 @@
                                 <td class="lableTD">
                                     Log Path :
                                 </td>
-                                <td colspan="2">
+                                <td colspan="2" class="valueTD">
                                     <input id="TransactionNode" class="folderPathInput">
                                 </td>
                             </tr>
@@ -150,7 +156,7 @@
                 </tr>
                 <tr>
                     <td class="lableTD">Logs Root Folder Path : </td>
-                    <td>
+                    <td class="valueTD">
                         <input id="LogsValueNode" class="folderPathInput">
                     </td>
                 </tr>
@@ -163,27 +169,27 @@
                                 </tr>
                                 <tr>
                                     <td class="lableTD">Enable : </td>
-                                    <td>
+                                    <td class="valueTD">
                                         <select id="AuditEnableAttr" onchange="AuditLogEnableToggle()">
                                             <option value="True">Yes</option>
                                             <option value="False">No</option>
                                         </select>
                                     </td>
                                     <td class="lableTD">Auto - Clear Logs : </td>
-                                    <td>
+                                    <td class="valueTD">
                                         <select id="AuditACLAttr" onchange="AuditACLToggle()">
                                             <option value="True">Yes</option>
                                             <option value="False">No</option>
                                         </select>
                                     </td>
                                     <td class="lableTD">Auto - Clear Interval : </td>
-                                    <td><select class="0To500" id="AuditACLDaysAttr"></select></td>
+                                    <td class="valueTD"><select class="0To500" id="AuditACLDaysAttr"></select></td>
                                 </tr>
                                 <tr>
                                     <td class="lableTD">
                                         Log Path :
                                     </td>
-                                    <td colspan="5">
+                                    <td colspan="5" class="valueTD">
                                         <input id="AuditNode" class="folderPathInput">
                                     </td>
                                 </tr>
@@ -198,27 +204,27 @@
                             </tr>
                             <tr>
                                 <td class="lableTD">Enable : </td>
-                                <td>
+                                <td class="valueTD">
                                     <select disabled id="ErrorEnableAttr">
                                         <option value="True" selected>Yes</option>
                                         <option value="False">No</option>
                                     </select>
                                 </td>
                                 <td class="lableTD">Auto - Clear Logs : </td>
-                                <td>
+                                <td class="valueTD">
                                     <select id="ErrorACLAttr" onchange="ErrorACLToggle()">
                                         <option value="True">Yes</option>
                                         <option value="False">No</option>
                                     </select>
                                 </td>
                                 <td class="lableTD">Auto - Clear Interval : </td>
-                                <td><select class="0To500" id="ErrorACLDaysAttr"></select></td>
+                                <td class="valueTD"><select class="0To500" id="ErrorACLDaysAttr"></select></td>
                             </tr>
                             <tr>
                                 <td class="lableTD">
                                     Log Path :
                                 </td>
-                                <td colspan="5">
+                                <td colspan="5" class="valueTD">
                                     <input id="ErrorNode" class="folderPathInput">
                                 </td>
                             </tr>
@@ -228,13 +234,13 @@
                 </tr>
                 <tr>
                     <td class="lableTD">Current Execution Environment : </td>
-                    <td>
+                    <td class="valueTD">
                         <input type="radio" id="CurrExecEnvDevelopment" name="CurrExecEnv" value="Development"> Development
                         <input type="radio" id="CurrExecEnvUAT" name="CurrExecEnv" value="UAT"> UAT
                         <input type="radio" id="CurrExecEnvProduction" name="CurrExecEnv" value="Production"> Production
                     </td>
                     <td class="lableTD">Enable Debugging (Message Boxes) : </td>
-                    <td>
+                    <td class="valueTD">
                         <select id="DebugFlagNode">
                             <option value="True">Yes</option>
                             <option value="False">No</option>
@@ -248,11 +254,11 @@
                             <p style="text-align: right"><button onclick="AddAppToGrid('','','','')"> + Add New App</button> </p>
                             <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
                                 <thead>
-                                    <th>Application Name</th>
-                                    <th>Development Path</th>
-                                    <th>UAT Path</th>
-                                    <th>Production Path</th>
-                                    <th>Delete</th>
+                                    <th class="lableTDheader">Application Name</th>
+                                    <th class="lableTDheader">Development Path</th>
+                                    <th class="lableTDheader">UAT Path</th>
+                                    <th class="lableTDheader">Production Path</th>
+                                    <th class="lableTDheader">Delete</th>
                                 </thead>
                                 <tbody id="AppsConfiguredBody">
 
@@ -271,10 +277,10 @@
                                 <button style="float: right;" onclick="AddNewCredentials()"> + Add New Credentials</button> </p>
                             <table border="1" style="border-collapse: collapse" cellpadding="10" width="100%">
                                 <thead>
-                                    <th>Credential Name(Unique)</th>
-                                    <th>Credential Description</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th class="lableTDheader">Credential Name(Unique)</th>
+                                    <th class="lableTDheader">Credential Description</th>
+                                    <th class="lableTDheader">Edit</th>
+                                    <th class="lableTDheader">Delete</th>
                                 </thead>
                                 <tbody id="CredentialsConfiguredBody">
 
@@ -300,35 +306,35 @@
                     <table cellpadding="10">
                         <tbody>
                             <tr>
-                                <td>
+                                <td class="lableTD">
                                     Credential Name (Unique) :
                                 </td>
-                                <td>
+                                <td class="valueTD">
                                     <input type="hidden" id="currentCredentialModalMode">
                                     <input type="text" id="credentialName">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="lableTD">
                                     Credential Description :
                                 </td>
-                                <td>
+                                <td class="valueTD">
                                     <input type="text" id="credentialDescription">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="lableTD">
                                     Credential Secret Key :
                                 </td>
-                                <td>
+                                <td class="valueTD">
                                     <input type="password" id="credentialSecretKey">
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="lableTD">
                                     Credential :
                                 </td>
-                                <td>
+                                <td class="valueTD">
                                     <input type="password" id="credentialActual">
                                 </td>
                             </tr>
@@ -552,7 +558,7 @@
         }
     }
     function AddAppToGrid(AppName,DevPath,UATPath,ProdPath){
-        var tmpTag = "<tr><td><input value='"+AppName+"' class='folderPathInput'></td><td><input value='"+DevPath+"' class='folderPathInput'></td><td><input value='"+UATPath+"' class='folderPathInput'></td><td><input value='"+ProdPath+"' class='folderPathInput'></td><td style='text-align: center'><button onclick='DeleteAppFromGrid(this)'><img src='Internal/delete.png' style='width: 25px;height: 25px;'></button> </td></tr>";
+        var tmpTag = "<tr><td class='valueTD'><input value='"+AppName+"' class='folderPathInput'></td><td class='valueTD'><input value='"+DevPath+"' class='folderPathInput'></td><td class='valueTD'><input value='"+UATPath+"' class='folderPathInput'></td><td class='valueTD'><input value='"+ProdPath+"' class='folderPathInput'></td><td style='text-align: center' class='valueTD'><button onclick='DeleteAppFromGrid(this)'><img src='Internal/delete.png' style='width: 25px;height: 25px;'></button> </td></tr>";
         $("#AppsConfiguredBody").html($("#AppsConfiguredBody").html()+tmpTag);
         AppsConfiguredCount++;
         $("#AppsConfiguredCount").html(AppsConfiguredCount);
@@ -661,17 +667,23 @@
         }
     };
     function SearchCredentials(){
-        if($("#myPasscode").val() == ""){
-            alert("Please enter your Secret Key and then press Search.");
-            return;
-        }
+//        Dosenot work when closing "Secured Credential Vault Manager"
+//        if($("#myPasscode").val() == ""){
+//            alert("Please enter your Secret Key and then press Search.");
+//            return;
+//        }
         var secretKey = $("#myPasscode").val();
         $("#CredentialsConfiguredBody").html("");
         for(i=0;i<=100;i++) {
             if (xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i] == undefined) break;
-            var deCypheredText = CryptoJS.AES.decrypt(xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialActual")[0].childNodes[0].nodeValue, secretKey).toString(CryptoJS.enc.Utf8);
+            var deCypheredText = "";
+            try{
+                deCypheredText = CryptoJS.AES.decrypt(xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialActual")[0].childNodes[0].nodeValue, secretKey).toString(CryptoJS.enc.Utf8);
+            } catch (e){
+
+            }
             if(deCypheredText.indexOf("###PASSWORD START###")>=0 && deCypheredText.indexOf("###PASSWORD END###")>=0){
-                var tmpTag = "<tr><td style='text-align: center'>"+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"</td><td style='text-align: center'>"+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue+"</td><td style='text-align: center'><button onclick='UpdateCurrentCredentials(\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"\",\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue+"\")'><img src='Internal/edit.png' style='width: 25px;height: 25px;'></button></td><td style='text-align: center'> <button onclick='DeleteCredentials(this,\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"\")'><img src='Internal/delete.png' style='width: 25px;height: 25px;'></button> </td></tr>";
+                var tmpTag = "<tr><td style='text-align: center' class='valueTD'>"+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"</td><td style='text-align: center' class='valueTD'>"+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue+"</td><td style='text-align: center' class='valueTD'><button onclick='UpdateCurrentCredentials(\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"\",\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialDescription")[0].childNodes[0].nodeValue+"\")'><img src='Internal/edit.png' style='width: 25px;height: 25px;'></button></td><td style='text-align: center' class='valueTD'> <button onclick='DeleteCredentials(this,\""+xmlDoc.getElementsByTagName("Credentials")[0].getElementsByTagName("Credential")[i].getElementsByTagName("CredentialName")[0].childNodes[0].nodeValue+"\")'><img src='Internal/delete.png' style='width: 25px;height: 25px;'></button> </td></tr>";
                 $("#CredentialsConfiguredBody").html($("#CredentialsConfiguredBody").html()+tmpTag);
             }
         }

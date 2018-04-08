@@ -38,8 +38,6 @@ for (var i= 0; i < args.length; i++) {
         secret = args(i);
     }
 }
-WScript.Echo(cypher);
-WScript.Echo(secret);
 
 var DecryptedText = CryptoJS.AES.decrypt(cypher, secret);
 DecryptedText = DecryptedText.toString(CryptoJS.enc.Utf8);
