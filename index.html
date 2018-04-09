@@ -642,6 +642,10 @@
             alert("Credential Secret Key is Mandatory!");
             return false;
         }
+        if($("#credentialSecretKey").val().length<8){
+            alert("Lenght of Secret Key should be minimum 8 characters.");
+            return false;
+        }
         if($("#credentialActual").val()==""){
             alert("Credential is Mandatory!");
             return false;
